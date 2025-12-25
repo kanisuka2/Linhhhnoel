@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noel cho Linh 🎄</title>
+
+<style>
+body{
+  margin:0; min-height:100vh; overflow:hidden;
+  background:#000;
+  font-family:monospace;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+/* ❄💖⭐🎁 rơi */
+.fall{
+  position:fixed;
+  top:-30px;
+  pointer-events:none;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(120vh)}
+}
+
+/* ⭐ rơi chéo */
+.starFall{
+  position:fixed;
+  top:-20px;
+  animation:starFly linear forwards;
+}
+@keyframes starFly{
+  to{
+    transform:translate(120vw,120vh) rotate(360deg);
+    opacity:0;
+  }
+}
+
+/* 🎄 */
+.tree{
+  font-size:34px;
+  line-height:1.1;
+  margin-top:20px;
+}
+.starTop{color:gold;text-shadow:0 0 25px gold;}
+.light{animation:blink 1.4s infinite alternate;}
+@keyframes blink{
+  0%{color:red}50%{color:hotpink}100%{color:cyan}
+}
+
+/* 🎁 dưới */
+.gifts{
+  margin-top:12px;
+  font-size:38px;
+  display:flex;
+  gap:14px;
+}
+.gift{cursor:pointer;filter:drop-shadow(0 0 8px gold);}
+
+/* ✍️ */
+input{
+  margin-top:14px;
+  padding:12px 22px;
+  border-radius:30px;
+  border:none;
+  font-size:18px;
+}
+button{
+  margin-top:12px;
+  padding:14px 34px;
+  border-radius:40px;
+  border:none;
+  font-size:18px;
+  background:linear-gradient(135deg,#ff5fa2,#ff85c2);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 0 30px hotpink;
+}
+
+/* 💬 */
+#msg,#sub,#error{display:none;}
+#msg{margin-top:18px;font-size:32px;color:#ffb6d9;text-shadow:0 0 20px pink;}
+#sub{margin-top:6px;font-size:20px;}
+#error{color:#888}
+
+/* 💖 tim nổ */
+.heartBurst{
+  position:fixed;
+  font-size:22px;
+  animation:burst 2.2s ease-out forwards;
+}
+@keyframes burst{
+  to{
+    transform:translate(
+      calc(-200px + 400px * var(--x)),
+      calc(-200px + 400px * var(--y))
+    ) scale(1.3);
+    opacity:0;
+  }
+}
+
+/* ✨ chữ từ quà */
+.popWord{
+  position:fixed;
+  font-size:26px;
+  animation:pop 2.5s ease-out forwards;
+}
+@keyframes pop{
+  to{transform:translateY(-140px) rotate(10deg);opacity:0}
+}
+
+/* 🎅 bay */
+.fly{
+  position:fixed;
+  font-size:40px;
+  animation:fly linear infinite;
+}
+@keyframes fly{
+  from{transform:translate(-10vw,10vh)}
+  to{transform:translate(110vw,-20vh)}
+}
+
+/* ❄ vệt tuyết */
+.trail{
+  position:fixed;
+  font-size:12px;
+  opacity:.7;
+}
+.firework{
+  position:fixed;
+  width:6px;height:6px;
+  background:gold;
+  border-radius:50%;
+  animation:fw 1.4s ease-out forwards;
+}
+@keyframes fw{
+  to{
+    transform:translate(
+      calc(-150px + 300px * var(--x)),
+      calc(-150px + 300px * var(--y))
+    );
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<script>
+/* ❄💖⭐🎁 nền */
+const icons=["❄","💖","⭐","🎁"];
+for(let i=0;i<300;i++){
+  const f=document.createElement("div");
+  f.className="fall";
+  f.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+  f.style.left=Math.random()*100+"vw";
+  f.style.fontSize=14+Math.random()*24+"px";
+  f.style.opacity=Math.random();
+  f.style.animationDuration=3+Math.random()*7+"s";
+  document.body.appendChild(f);
+}
+</script>
+
+<div class="tree">
+  <span class="starTop">⭐</span><br>
+  <span class="light">***</span><br>
+  <span class="light">*****</span><br>
+  <span class="light">*******</span><br>
+  <span class="light">*********</span><br>
+  <span class="light">***********</span><br>
+  <span class="light">*************</span><br>
+  <span class="light">***************</span><br>
+  <span class="light">*****************</span><br>
+  |||<br>|||
+</div>
+
+<div class="gifts">
+  <span class="gift" onclick="spawnWord(event)">🎁</span>
+  <span class="gift" onclick="spawnWord(event)">🎁</span>
+  <span class="gift" onclick="spawnWord(event)">🎁</span>
+  <span class="gift" onclick="spawnWord(event)">🎁</span>
+  <span class="gift" onclick="spawnWord(event)">🎁</span>
+</div>
+
+<input id="nameInput" placeholder="Nhập tên Linh 💕">
+<button onclick="openGift()">🎶 MỞ QUÀ NOEL 🎶</button>
+
+<div id="msg">🎄 Mery chít mợt Linh 🎄</div>
+<div id="sub">Nhớ bánh Creampie Velvet của anh đấy nhé =]]]</div>
+<div id="error">🙈 Chưa đúng tên rồi…</div>
+
+<audio id="music" src="jingle-bells.mp3"></audio>
+
+<script>
+const words=["Chúc","Em","Giáng","Sinh","An Lành"];
+const flyers=["🎅","🦌","🛷","⛄"];
+
+function spawnWord(e){
+  const r=e.target.getBoundingClientRect();
+  const w=document.createElement("div");
+  w.className="popWord";
+  w.textContent=words[Math.floor(Math.random()*words.length)];
+  w.style.left=r.left+r.width/2+"px";
+  w.style.top=r.top+"px";
+  document.body.appendChild(w);
+  setTimeout(()=>w.remove(),2500);
+}
+
+function spawnFlyer(){
+  const f=document.createElement("div");
+  f.className="fly";
+  f.textContent=flyers[Math.floor(Math.random()*flyers.length)];
+  f.style.top=Math.random()*100+"vh";
+  f.style.animationDuration=8+Math.random()*8+"s";
+  document.body.appendChild(f);
+
+  const trail=setInterval(()=>{
+    const t=document.createElement("div");
+    t.className="trail";
+    t.textContent="❄";
+    t.style.left=f.getBoundingClientRect().left+"px";
+    t.style.top=f.getBoundingClientRect().top+"px";
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),800);
+  },120);
+
+  setTimeout(()=>{
+    clearInterval(trail);
+    f.remove();
+  },16000);
+}
+setInterval(spawnFlyer,2000);
+
+/* 🎆 pháo hoa */
+function firework(){
+  for(let i=0;i<30;i++){
+    const p=document.createElement("div");
+    p.className="firework";
+    p.style.left="50%";
+    p.style.top="50%";
+    p.style.setProperty("--x",Math.random());
+    p.style.setProperty("--y",Math.random());
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1400);
+  }
+}
+
+function openGift(){
+  if(nameInput.value.trim().toLowerCase()==="linh"){
+    msg.style.display=sub.style.display="block";
+    error.style.display="none";
+    music.play();
+
+    /* 💖 */
+    for(let i=0;i<60;i++){
+      const h=document.createElement("div");
+      h.className="heartBurst";
+      h.innerHTML="💖";
+      h.style.left="50%";h.style.top="50%";
+      h.style.setProperty("--x",Math.random());
+      h.style.setProperty("--y",Math.random());
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),2200);
+    }
+
+    /* 🎵 beat detect */
+    const ctx=new AudioContext();
+    const src=ctx.createMediaElementSource(music);
+    const analyser=ctx.createAnalyser();
+    src.connect(analyser);
+    analyser.connect(ctx.destination);
+    analyser.fftSize=256;
+    const data=new Uint8Array(analyser.frequencyBinCount);
+
+    setInterval(()=>{
+      analyser.getByteFrequencyData(data);
+      const avg=data.reduce((a,b)=>a+b)/data.length;
+      if(avg>120) firework();
+    },200);
+
+  }else error.style.display="block";
+}
+</script>
+
+</body>
+</html>
